@@ -1,83 +1,56 @@
+#!/usr/bin/python
+
 import wx
-import sys
-
-class MyFrame(wx.Frame):
-    def __init__(self):
-        wx.Frame.__init__(self, None, -1,"Popup Menu Example")
-        
-        self.window = wx.Window(self)
-
-        # Create menu 'File'
-        fileMenu = wx.Menu()
-
-        # Create exit and open button
-        exitButton = wx.MenuItem(fileMenu, -1, '&Exit\tCtrl+X')
-        openButton = wx.MenuItem(fileMenu, -1, '&Open File\tCtrl+O')
-
-        # Add two buttons into menu 'File'
-        fileMenu.AppendItem(exitButton)
-        fileMenu.AppendItem(openButton)
-
-        # Bind Exit button to OnExit handler
-        self.Bind(wx.EVT_MENU, self.OnExit, exitButton)
 
 
-        # Create MenuBar          
-        menuBar = wx.MenuBar()
-        # Add menu 'File' to 'Menu'
-        menuBar.Append(fileMenu, "Menu")
-        self.SetMenuBar(menuBar)
+class Example(wx.Frame):
+
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs)
+
+        self.InitUI()
+
+    def InitUI(self):
+
+        # Create a skeleton for ToolBar
+        toolbar = self.CreateToolBar()
+
+        # Create two icon
+        self.Trump = wx.Bitmap("Trump.jpg")
+        self.Biden = wx.Bitmap("Biden.jpg")
+
+        # Add icons to ToolBar
+        toolbar1 = toolbar.AddTool(-1,self.Trump)
+        toolbar2 = toolbar.AddTool(-1,self.Biden)
+
+        # Active them
+        toolbar.Realize()
+
+        #Bind them to their handler
+        self.Bind(wx.EVT_TOOL, self.OnSelectTrump, toolbar1)
+        self.Bind(wx.EVT_TOOL, self.OnSelectBiden, toolbar2)
+
+        # Set size
+        self.SetSize((350, 250))
+        # Set title
+        self.SetTitle('Vote Vote Vote !!!')
+        # Set center
+        self.Centre()
+
+    def OnSelectTrump(self, e):
+        print ('You have selected Trump as President')
+
+    def OnSelectBiden(self, e):
+        print ('You have selected Biden as President')
 
 
-        wx.StaticText(self.window, wx.ID_ANY,"Right-click on the panel to show a popup menu", (25, 70))
+def main():
 
-        # Create a popupmenu appeared once user click right-click.
-        self.popupmenu = wx.Menu()
-
-        # Create two items
-        exitButtonPop = wx.MenuItem(self.popupmenu, -1, '&Exit\tCtrl+X')
-        openButtonPop = wx.MenuItem(self.popupmenu, -1, '&Open File\tCtrl+O')
-
-        # Bind Exit button to OnExitPop handler
-        self.Bind(wx.EVT_MENU, self.OnExitPop, exitButtonPop)
-
-        # Bind Open button to OnOpenPop handler
-        self.Bind(wx.EVT_MENU, self.OnOpenPop, openButtonPop)
-
-        # Add Exit and Open button into popup menu
-        item = self.popupmenu.AppendItem(exitButtonPop)
-        item = self.popupmenu.AppendItem(openButtonPop)
-
-        # Bind right-click event to OnShowPopup handler
-        self.Bind(wx.EVT_CONTEXT_MENU, self.OnShowPopup)
+    app = wx.App()
+    ex = Example(None)
+    ex.Show()
+    app.MainLoop()
 
 
-    def OnShowPopup(self, event):
-        # Once righ-click, it is triggerd
-        currentMosePosition = event.GetPosition()
-        currentMosePosition = self.window.ScreenToClient(currentMosePosition)
-        self.window.PopupMenu(self.popupmenu, currentMosePosition)
-        
-
-    def OnPopupItemSelected(self, event):
-        print 'widget[%d]: event = %s'%(sys._getframe().f_lineno, event.GetId())
-        item = self.popupmenu.FindItemById(event.GetId())
-        text = item.GetText()
-
-        wx.MessageBox("You selected item '%s'" % text, style=wx.ICON_WARNING)
-        
-
-    def OnExit(self, event):
-        print 'Exiting'
-
-    def OnExitPop(self, event):
-        print 'Exiting'
-
-    def OnOpenPop(self, event):
-        print 'Opening'    
-        
-
-app = wx.PySimpleApp()
-frame = MyFrame()
-frame.Show()
-app.MainLoop()
+if __name__ == '__main__':
+    main()
