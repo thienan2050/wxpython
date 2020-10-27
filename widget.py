@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
-
 """
 ZetCode wxPython tutorial
 
-In this example we create a layout
-of a calculator with wx.GridSizer.
+In this example we create review
+layout with wx.FlexGridSizer.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -14,7 +13,6 @@ last modified: July 2020
 
 import wx
 
-
 class Example(wx.Frame):
 
     def __init__(self, parent, title):
@@ -22,49 +20,38 @@ class Example(wx.Frame):
 
         self.InitUI()
         self.Centre()
-
+        self.Show()
 
     def InitUI(self):
 
-        menubar = wx.MenuBar()
-        fileMenu = wx.Menu()
-        menubar.Append(fileMenu, '&File')
-        self.SetMenuBar(menubar)
+        panel = wx.Panel(self)
 
-        vbox = wx.BoxSizer(wx.VERTICAL)
-        self.display = wx.TextCtrl(self, style=wx.TE_RIGHT)
-        vbox.Add(self.display, flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=30)
-        gs = wx.GridSizer(5, 4, 10, 10)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-        gs.AddMany( [(wx.Button(self, label='Cls'), 0, wx.EXPAND),
-            (wx.Button(self, label='Bck'), 0, wx.EXPAND),
-            (wx.StaticText(self), wx.EXPAND),
-            (wx.Button(self, label='Close'), 0, wx.EXPAND),
-            (wx.Button(self, label='7'), 0, wx.EXPAND),
-            (wx.Button(self, label='8'), 0, wx.EXPAND),
-            (wx.Button(self, label='9'), 0, wx.EXPAND),
-            (wx.Button(self, label='/'), 0, wx.EXPAND),
-            (wx.Button(self, label='4'), 0, wx.EXPAND),
-            (wx.Button(self, label='5'), 0, wx.EXPAND),
-            (wx.Button(self, label='6'), 0, wx.EXPAND),
-            (wx.Button(self, label='*'), 0, wx.EXPAND),
-            (wx.Button(self, label='1'), 0, wx.EXPAND),
-            (wx.Button(self, label='2'), 0, wx.EXPAND),
-            (wx.Button(self, label='3'), 0, wx.EXPAND),
-            (wx.Button(self, label='-'), 0, wx.EXPAND),
-            (wx.Button(self, label='0'), 0, wx.EXPAND),
-            (wx.Button(self, label='.'), 0, wx.EXPAND),
-            (wx.Button(self, label='='), 0, wx.EXPAND),
-            (wx.Button(self, label='+'), 0, wx.EXPAND) ])
+        fgs = wx.FlexGridSizer(3, 2, 9, 25)
 
-        vbox.Add(gs, proportion=1, flag=wx.EXPAND)
-        self.SetSizer(vbox)
+        title = wx.StaticText(panel, label="Title")
+        author = wx.StaticText(panel, label="Author")
+        review = wx.StaticText(panel, label="Review")
+
+        tc1 = wx.TextCtrl(panel)
+        tc2 = wx.TextCtrl(panel)
+        tc3 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+
+        fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author),
+            (tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+
+        fgs.AddGrowableRow(2, 10)
+        fgs.AddGrowableCol(1, 10)
+
+        hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
+        panel.SetSizer(hbox)
 
 
 def main():
 
     app = wx.App()
-    ex = Example(None, title='Calculator')
+    ex = Example(None, title='Review')
     ex.Show()
     app.MainLoop()
 
