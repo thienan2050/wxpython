@@ -1,9 +1,25 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+"""
+ZetCode wxPython tutorial
+
+In this example, we create two horizontal
+toolbars.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: July 2020
+"""
 
 import wx
 
 
+EVT_TRUMP = 2
+EVT_BIDEN = 3
+
+
 class Example(wx.Frame):
+
     def __init__(self, *args, **kwargs):
         super(Example, self).__init__(*args, **kwargs)
 
@@ -11,59 +27,50 @@ class Example(wx.Frame):
 
     def InitUI(self):
 
-        #Create a vertical box
+        # Create a vertical box
         vbox = wx.BoxSizer(wx.VERTICAL)
 
-        # Create a skeleton for ToolBar1
-        toolbar1 = wx.ToolBar(self)
+        # Create sketon of toolbar
+        self.toolbar = wx.ToolBar(self)
+        # Create two buttons in toolbar
+        trumpButton = self.toolbar.AddTool(EVT_TRUMP, wx.Bitmap('Trump.jpg'))
+        bidenButton = self.toolbar.AddTool(EVT_BIDEN, wx.Bitmap('Biden.jpg'))
 
+        # Enable two buttons
+        self.toolbar.EnableTool(EVT_BIDEN, True)
+        self.toolbar.EnableTool(EVT_TRUMP, True)
 
-        # Create two icon
-        self.Trump = wx.Bitmap("Trump.jpg")
-        self.Biden = wx.Bitmap("Biden.jpg")
+        # Add seperators
+        self.toolbar.AddSeparator()
+        self.toolbar.AddSeparator()
+        texit = self.toolbar.AddTool(wx.ID_EXIT, wx.Bitmap('Biden.jpg'))
+        # Active toolbar
+        self.toolbar.Realize()
 
-        # Add icons to ToolBar
-        icon1 = toolbar1.AddTool(-1,self.Trump)
-        icon2 = toolbar1.AddTool(-1,self.Biden)
+        self.Bind(wx.EVT_TOOL, self.OnQuit, texit)
+        self.Bind(wx.EVT_TOOL, self.OnSelectTrump, trumpButton)
+        self.Bind(wx.EVT_TOOL, self.OnSelectBiden, bidenButton)
 
-        # Active them
-        toolbar1.Realize()
-
-
-        # Create a skeleton for ToolBar2
-        toolbar2 = wx.ToolBar(self)
-
-        icon4 = toolbar2.AddTool(-1, self.Biden)
-        icon3 = toolbar2.AddTool(-1, self.Trump)
-        
-
-        toolbar2.Realize()
-
-
-        # Add two toolbar to vertical box
-        vbox. (toolbar1, 0, wx.EXPAND)
-        vbox.Add(toolbar2, 0, wx.EXPAND)
-        
+        # Add toolbar to vbox so we can fix the size
+        vbox.Add(self.toolbar, 0, wx.EXPAND)
         self.SetSizer(vbox)
-
-        #Bind them to their handler
-        self.Bind(wx.EVT_TOOL, self.OnSelectTrump, icon1)
-        self.Bind(wx.EVT_TOOL, self.OnSelectBiden, icon2)
-        self.Bind(wx.EVT_TOOL, self.OnSelectTrump, icon3)
-        self.Bind(wx.EVT_TOOL, self.OnSelectBiden, icon4)
-
-        # Set size
+        
         self.SetSize((350, 250))
-        # Set title
-        self.SetTitle('Vote Vote Vote !!!')
-        # Set center
+        self.SetTitle('Undo redo')
         self.Centre()
 
+
+
     def OnSelectTrump(self, e):
-        print ('You have selected Trump as President')
+        self.toolbar.EnableTool(EVT_BIDEN, True)
+        self.toolbar.EnableTool(EVT_TRUMP, False)
 
     def OnSelectBiden(self, e):
-        print ('You have selected Biden as President')
+        self.toolbar.EnableTool(EVT_BIDEN, False)
+        self.toolbar.EnableTool(EVT_TRUMP, True)
+
+    def OnQuit(self, e):
+        self.Close()
 
 
 def main():
