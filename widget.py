@@ -1,72 +1,95 @@
 #!/usr/bin/env python
 
-"""
+'''
 ZetCode wxPython tutorial
 
-This example shows four types of
-message dialogs.
+In this code example, we create a
+custom dialog.
 
 author: Jan Bodnar
 website: www.zetcode.com
 last modified: July 2020
-"""
+'''
 
 import wx
+
+class ChangeDepthDialog(wx.Dialog):
+
+    def __init__(self, *args, **kw):
+        super(ChangeDepthDialog, self).__init__(*args, **kw)
+
+        self.InitUI()
+        self.SetSize((250, 200))
+        self.SetTitle("Change Color Depth")
+
+
+    def InitUI(self):
+
+        pnl = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        sb = wx.StaticBox(pnl, label='Colors')
+        sbs = wx.StaticBoxSizer(sb, orient=wx.VERTICAL)
+        sbs.Add(wx.RadioButton(pnl, label='256 Colors',
+            style=wx.RB_GROUP))
+        sbs.Add(wx.RadioButton(pnl, label='16 Colors'))
+        sbs.Add(wx.RadioButton(pnl, label='2 Colors'))
+
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox1.Add(wx.RadioButton(pnl, label='Custom'))
+        hbox1.Add(wx.TextCtrl(pnl), flag=wx.LEFT, border=5)
+        sbs.Add(hbox1)
+
+        pnl.SetSizer(sbs)
+
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        okButton = wx.Button(self, label='Ok')
+        closeButton = wx.Button(self, label='Close')
+        hbox2.Add(okButton)
+        hbox2.Add(closeButton, flag=wx.LEFT, border=5)
+
+        vbox.Add(pnl, proportion=1,
+            flag=wx.ALL|wx.EXPAND, border=5)
+        vbox.Add(hbox2, flag=wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, border=10)
+
+        self.SetSizer(vbox)
+
+        okButton.Bind(wx.EVT_BUTTON, self.OnClose)
+        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
+
+
+    def OnClose(self, e):
+
+        self.Destroy()
 
 
 class Example(wx.Frame):
 
-    def __init__(self, *args, **kwargs):
-        super(Example, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw)
 
         self.InitUI()
 
+
     def InitUI(self):
 
-        panel = wx.Panel(self)
+        tb = self.CreateToolBar()
+        tb.AddTool(-1, bitmap=wx.Bitmap('Trump.jpg'))
 
-        hbox = wx.BoxSizer()
-        sizer = wx.GridSizer(2, 2, 2, 2)
+        tb.Realize()
 
-        btn1 = wx.Button(panel, label='Info')
-        btn2 = wx.Button(panel, label='Error')
-        btn3 = wx.Button(panel, label='Question')
-        btn4 = wx.Button(panel, label='Alert')
+        tb.Bind(wx.EVT_TOOL, self.OnChangeDepth)
 
-        sizer.AddMany([btn1, btn2, btn3, btn4])
-
-        hbox.Add(sizer, 0, wx.ALL, 15)
-        panel.SetSizer(hbox)
-
-        # Bind events and handlers
-        btn1.Bind(wx.EVT_BUTTON, self.ShowMessage1)
-        btn2.Bind(wx.EVT_BUTTON, self.ShowMessage2)
-        btn3.Bind(wx.EVT_BUTTON, self.ShowMessage3)
-        btn4.Bind(wx.EVT_BUTTON, self.ShowMessage4)
-
-        self.SetSize((300, 200))
-        self.SetTitle('Messages')
+        self.SetSize((350, 250))
+        self.SetTitle('Custom dialog')
         self.Centre()
 
+    def OnChangeDepth(self, e):
 
-    def ShowMessage1(self, event):
-        dial = wx.MessageDialog(None, 'Download completed', 'Info', wx.OK)
-        dial.ShowModal()
-
-    def ShowMessage2(self, event):
-        dial = wx.MessageDialog(None, 'Error loading file', 'Error',
-            wx.OK | wx.ICON_ERROR)
-        dial.ShowModal()
-
-    def ShowMessage3(self, event):
-        dial = wx.MessageDialog(None, 'Are you sure to quit?', 'Question',
-            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-        dial.ShowModal()
-
-    def ShowMessage4(self, event):
-        dial = wx.MessageDialog(None, 'Unallowed operation', 'Exclamation',
-            wx.OK | wx.ICON_EXCLAMATION)
-        dial.ShowModal()
+        cdDialog = ChangeDepthDialog(None,
+            title='Change Color Depth')
+        cdDialog.ShowModal()
+        cdDialog.Destroy()
 
 
 def main():
