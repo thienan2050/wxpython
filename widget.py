@@ -3,7 +3,7 @@
 """
 ZetCode wxPython tutorial
 
-In this example we work with wx.FocusEvent.
+In this example we work with wx.KeyEvent.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -12,41 +12,6 @@ last modified: July 2020
 
 import wx
 
-class MyWindow(wx.Panel):
-
-    def __init__(self, parent):
-        super(MyWindow, self).__init__(parent)
-
-        self.color = '#b3b3b3'
-
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
-        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-
-    def OnPaint(self, e):
-
-        dc = wx.PaintDC(self)
-
-        dc.SetPen(wx.Pen(self.color))
-        x, y = self.GetSize()
-        dc.DrawRectangle(0, 0, x, y)
-
-    def OnSize(self, e):
-        print 'OnSize'
-        self.Refresh()
-
-    def OnSetFocus(self, e):
-
-        self.color = '#ff0000'
-        self.Refresh()
-
-    def OnKillFocus(self, e):
-
-        self.color = '#b3b3b3'
-        self.Refresh()
-
-
 class Example(wx.Frame):
 
     def __init__(self, *args, **kw):
@@ -54,21 +19,29 @@ class Example(wx.Frame):
 
         self.InitUI()
 
-
     def InitUI(self):
 
-        grid = wx.GridSizer(2, 2, 10, 10)
-        grid.AddMany([(MyWindow(self), 0, wx.EXPAND|wx.TOP|wx.LEFT, 9),
-            (MyWindow(self), 0, wx.EXPAND|wx.TOP|wx.RIGHT, 9),
-            (MyWindow(self), 0, wx.EXPAND|wx.BOTTOM|wx.LEFT, 9),
-            (MyWindow(self), 0, wx.EXPAND|wx.BOTTOM|wx.RIGHT, 9)])
-
-
-        self.SetSizer(grid)
+        pnl = wx.Panel(self)
+        pnl.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        pnl.SetFocus()
 
         self.SetSize((350, 250))
-        self.SetTitle('Focus event')
+        self.SetTitle('Key event')
         self.Centre()
+
+    def OnKeyDown(self, e):
+
+        key = e.GetKeyCode()
+        print key
+
+        if key == wx.WXK_ESCAPE:
+
+            ret  = wx.MessageBox('Are you sure to quit?', 'Question',
+                wx.YES_NO | wx.NO_DEFAULT, self)
+
+            if ret == wx.YES:
+                self.Close()
+
 
 def main():
 
