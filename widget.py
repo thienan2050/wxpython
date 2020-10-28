@@ -3,8 +3,7 @@
 """
 ZetCode wxPython tutorial
 
-In this example we use automatic ids
-with wx.ID_ANY.
+In this example we use custom event ids.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -12,6 +11,11 @@ last modified: July 2020
 """
 
 import wx
+
+# Define some custom IDs
+ID_MENU_NEW = wx.NewId()
+ID_MENU_OPEN = wx.NewId()
+ID_MENU_SAVE = wx.NewId()
 
 
 class Example(wx.Frame):
@@ -23,31 +27,43 @@ class Example(wx.Frame):
 
     def InitUI(self):
 
-        panel = wx.Panel(self)
-        grid = wx.GridBagSizer(1, 1)
-        self.exitButton = wx.Button(panel, 100, 'Exit')
-        grid.Add(self.exitButton, pos=(0,0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=30)
+        self.CreateMenuBar()
+        self.CreateStatusBar()
 
-
-        self.CGV = wx.Button(panel, 1342, 'CGV')
-        grid.Add(self.CGV, pos=(0,2), flag=wx.RIGHT|wx.TOP, border=30)
-
-
-
-        self.Bind(wx.EVT_BUTTON, self.Handler, id=self.exitButton.GetId())
-        self.Bind(wx.EVT_BUTTON, self.Handler, id=self.CGV.GetId())
-
-        self.SetTitle("Automatic ids")
+        self.SetSize((350, 250))
+        self.SetTitle('Custom ids')
         self.Centre()
 
-        panel.SetSizer(grid)
-        grid.Fit(self)
+    def CreateMenuBar(self):
 
-    def Handler(self, event):
-        if event.GetId() == self.exitButton.GetId():
-            self.Close()
-        elif event.GetId() == self.CGV.GetId():
-            print 'CGV button'
+        mb = wx.MenuBar()
+
+        fMenu = wx.Menu()
+        fMenu.Append(ID_MENU_NEW, 'New')
+        fMenu.Append(ID_MENU_OPEN, 'Open')
+        fMenu.Append(ID_MENU_SAVE, 'Save')
+
+        mb.Append(fMenu, '&File')
+        self.SetMenuBar(mb)
+
+        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_NEW)
+        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_OPEN)
+        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_SAVE)
+
+    def DisplayMessage(self, e):
+
+        sb = self.GetStatusBar()
+
+        eid = e.GetId()
+
+        if eid == ID_MENU_NEW:
+            msg = 'New menu item selected'
+        elif eid == ID_MENU_OPEN:
+            msg = 'Open menu item selected'
+        elif eid == ID_MENU_SAVE:
+            msg = 'Save menu item selected'
+
+        sb.SetStatusText(msg)
 
 
 def main():
@@ -59,4 +75,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main() 
