@@ -3,7 +3,7 @@
 """
 ZetCode wxPython tutorial
 
-In this example we use custom event ids.
+In this example we work with wx.FocusEvent.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -12,10 +12,39 @@ last modified: July 2020
 
 import wx
 
-# Define some custom IDs
-ID_MENU_NEW = wx.NewId()
-ID_MENU_OPEN = wx.NewId()
-ID_MENU_SAVE = wx.NewId()
+class MyWindow(wx.Panel):
+
+    def __init__(self, parent):
+        super(MyWindow, self).__init__(parent)
+
+        self.color = '#b3b3b3'
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+
+    def OnPaint(self, e):
+
+        dc = wx.PaintDC(self)
+
+        dc.SetPen(wx.Pen(self.color))
+        x, y = self.GetSize()
+        dc.DrawRectangle(0, 0, x, y)
+
+    def OnSize(self, e):
+        print 'OnSize'
+        self.Refresh()
+
+    def OnSetFocus(self, e):
+
+        self.color = '#ff0000'
+        self.Refresh()
+
+    def OnKillFocus(self, e):
+
+        self.color = '#b3b3b3'
+        self.Refresh()
 
 
 class Example(wx.Frame):
@@ -25,46 +54,21 @@ class Example(wx.Frame):
 
         self.InitUI()
 
+
     def InitUI(self):
 
-        self.CreateMenuBar()
-        self.CreateStatusBar()
+        grid = wx.GridSizer(2, 2, 10, 10)
+        grid.AddMany([(MyWindow(self), 0, wx.EXPAND|wx.TOP|wx.LEFT, 9),
+            (MyWindow(self), 0, wx.EXPAND|wx.TOP|wx.RIGHT, 9),
+            (MyWindow(self), 0, wx.EXPAND|wx.BOTTOM|wx.LEFT, 9),
+            (MyWindow(self), 0, wx.EXPAND|wx.BOTTOM|wx.RIGHT, 9)])
+
+
+        self.SetSizer(grid)
 
         self.SetSize((350, 250))
-        self.SetTitle('Custom ids')
+        self.SetTitle('Focus event')
         self.Centre()
-
-    def CreateMenuBar(self):
-
-        mb = wx.MenuBar()
-
-        fMenu = wx.Menu()
-        fMenu.Append(ID_MENU_NEW, 'New')
-        fMenu.Append(ID_MENU_OPEN, 'Open')
-        fMenu.Append(ID_MENU_SAVE, 'Save')
-
-        mb.Append(fMenu, '&File')
-        self.SetMenuBar(mb)
-
-        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_NEW)
-        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_OPEN)
-        self.Bind(wx.EVT_MENU, self.DisplayMessage, id=ID_MENU_SAVE)
-
-    def DisplayMessage(self, e):
-
-        sb = self.GetStatusBar()
-
-        eid = e.GetId()
-
-        if eid == ID_MENU_NEW:
-            msg = 'New menu item selected'
-        elif eid == ID_MENU_OPEN:
-            msg = 'Open menu item selected'
-        elif eid == ID_MENU_SAVE:
-            msg = 'Save menu item selected'
-
-        sb.SetStatusText(msg)
-
 
 def main():
 
@@ -75,4 +79,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main() 
+    main()
