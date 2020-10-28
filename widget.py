@@ -3,8 +3,8 @@
 '''
 ZetCode wxPython tutorial
 
-In this code example, we create a
-custom dialog.
+In this example, we create an
+about dialog box.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -12,84 +12,67 @@ last modified: July 2020
 '''
 
 import wx
-
-class ChangeDepthDialog(wx.Dialog):
-
-    def __init__(self, *args, **kw):
-        super(ChangeDepthDialog, self).__init__(*args, **kw)
-
-        self.InitUI()
-        self.SetSize((250, 200))
-        self.SetTitle("Change Color Depth")
-
-
-    def InitUI(self):
-
-        pnl = wx.Panel(self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
-
-        sb = wx.StaticBox(pnl, label='Colors')
-        sbs = wx.StaticBoxSizer(sb, orient=wx.VERTICAL)
-        sbs.Add(wx.RadioButton(pnl, label='256 Colors',
-            style=wx.RB_GROUP))
-        sbs.Add(wx.RadioButton(pnl, label='16 Colors'))
-        sbs.Add(wx.RadioButton(pnl, label='2 Colors'))
-
-        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox1.Add(wx.RadioButton(pnl, label='Custom'))
-        hbox1.Add(wx.TextCtrl(pnl), flag=wx.LEFT, border=5)
-        sbs.Add(hbox1)
-
-        pnl.SetSizer(sbs)
-
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        okButton = wx.Button(self, label='Ok')
-        closeButton = wx.Button(self, label='Close')
-        hbox2.Add(okButton)
-        hbox2.Add(closeButton, flag=wx.LEFT, border=5)
-
-        vbox.Add(pnl, proportion=1,
-            flag=wx.ALL|wx.EXPAND, border=5)
-        vbox.Add(hbox2, flag=wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, border=10)
-
-        self.SetSizer(vbox)
-
-        okButton.Bind(wx.EVT_BUTTON, self.OnClose)
-        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
-
-
-    def OnClose(self, e):
-
-        self.Destroy()
+import wx.adv
 
 
 class Example(wx.Frame):
 
-    def __init__(self, *args, **kw):
-        super(Example, self).__init__(*args, **kw)
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs)
 
         self.InitUI()
 
-
     def InitUI(self):
 
-        tb = self.CreateToolBar()
-        tb.AddTool(-1, bitmap=wx.Bitmap('Trump.jpg'))
+        menubar = wx.MenuBar()
+        help = wx.Menu()
+        help.Append(wx.ID_ANY, '&About')
+        help.Bind(wx.EVT_MENU, self.OnAboutBox)
 
-        tb.Realize()
-
-        tb.Bind(wx.EVT_TOOL, self.OnChangeDepth)
+        menubar.Append(help, '&Help')
+        self.SetMenuBar(menubar)
 
         self.SetSize((350, 250))
-        self.SetTitle('Custom dialog')
+        self.SetTitle('About dialog box')
         self.Centre()
 
-    def OnChangeDepth(self, e):
+    def OnAboutBox(self, e):
 
-        cdDialog = ChangeDepthDialog(None,
-            title='Change Color Depth')
-        cdDialog.ShowModal()
-        cdDialog.Destroy()
+        description = """File Hunter is an advanced file manager for
+the Unix operating system. Features include powerful built-in editor,
+advanced search capabilities, powerful batch renaming, file comparison,
+extensive archive handling and more.
+"""
+
+        licence = """\nFile Hunter is free software; you can redistribute
+it and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 2 of the License,
+or (at your option) any later version.
+
+File Hunter is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details. You should have
+received a copy of the GNU General Public License along with File Hunter;
+if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307  USA"""
+
+
+        info = wx.adv.AboutDialogInfo()
+
+        info.SetIcon(wx.Icon('Trump.jpg', wx.BITMAP_TYPE_PNG))
+        info.SetName('File Hunter')
+        info.SetVersion('1.0')
+        info.SetDescription(description)
+        info.SetCopyright('(C) 2007 - 2020 Jan Bodnar')
+        info.SetWebSite('http://www.zetcode.com')
+        info.SetLicence(licence)
+        info.AddDeveloper('Jan Bodnar')
+        info.AddDocWriter('Jan Bodnar')
+        info.AddArtist('The Tango crew')
+        info.AddTranslator('Jan Bodnar')
+
+        wx.adv.AboutBox(info)
 
 
 def main():
