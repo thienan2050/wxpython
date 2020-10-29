@@ -1,10 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 """
 ZetCode wxPython tutorial
 
-In this code example, we create three
-toggle button widgets.
+In this code example, we create a static text.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -23,72 +22,38 @@ class Example(wx.Frame):
 
     def InitUI(self):
 
+        txt1 = '''I'm giving up the ghost of love
+in the shadows cast on devotion
+She is the one that I adore
+creed of my silent suffocation
+Break this bittersweet spell on me
+lost in the arms of destiny'''
+
+        txt2 = '''There is something in the way
+You're always somewhere else
+Feelings have deserted me
+To a point of no return
+I don't believe in God
+But I pray for you'''
+
         pnl = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
 
-        self.col = wx.Colour(0, 0, 0)
+        font = wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.DEFAULT)
 
-        rtb = wx.ToggleButton(pnl, label='red', pos=(20, 25))
-        gtb = wx.ToggleButton(pnl, label='green', pos=(20, 60))
-        btb = wx.ToggleButton(pnl, label='blue', pos=(20, 100))
+        st1 = wx.StaticText(pnl, label=txt1, style=wx.ALIGN_LEFT)
+        st2 = wx.StaticText(pnl, label=txt2, style=wx.ALIGN_CENTER)
 
-        self.cpnl  = wx.Panel(pnl, pos=(150, 20), size=(110, 110))
-        self.cpnl.SetBackgroundColour(self.col)
+        st1.SetFont(font)
+        st2.SetFont(font)
 
-        rtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleRed)
-        gtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleGreen)
-        btb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleBlue)
+        vbox.Add(st1, flag=wx.ALL, border=15)
+        vbox.Add(st2, flag=wx.ALL, border=15)
+        
+        pnl.SetSizer(vbox)
 
-        self.SetSize((350, 250))
-        self.SetTitle('Toggle buttons')
+        self.SetTitle('Bittersweet')
         self.Centre()
-
-    def ToggleRed(self, e):
-
-        obj = e.GetEventObject()
-        isPressed = obj.GetValue()
-
-        green = self.col.Green()
-        blue = self.col.Blue()
-
-        if isPressed:
-            self.col.Set(255, green, blue)
-        else:
-            self.col.Set(0, green, blue)
-
-        self.cpnl.SetBackgroundColour(self.col)
-        self.cpnl.Refresh()
-
-    def ToggleGreen(self, e):
-
-        obj = e.GetEventObject()
-        isPressed = obj.GetValue()
-
-        red = self.col.Red()
-        blue = self.col.Blue()
-
-        if isPressed:
-            self.col.Set(red, 255, blue)
-        else:
-            self.col.Set(red, 0, blue)
-
-        self.cpnl.SetBackgroundColour(self.col)
-        self.cpnl.Refresh()
-
-    def ToggleBlue(self, e):
-
-        obj = e.GetEventObject()
-        isPressed = obj.GetValue()
-
-        red = self.col.Red()
-        green = self.col.Green()
-
-        if isPressed:
-            self.col.Set(red, green, 255)
-        else:
-            self.col.Set(red, green, 0)
-
-        self.cpnl.SetBackgroundColour(self.col)
-        self.cpnl.Refresh()
 
 
 def main():
