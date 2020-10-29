@@ -1,14 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 ZetCode wxPython tutorial
 
-In this code example, we create a static text.
+In this code example, we create a static line.
 
 author: Jan Bodnar
 website: www.zetcode.com
 last modified: July 2020
 """
+
 
 import wx
 
@@ -22,38 +23,51 @@ class Example(wx.Frame):
 
     def InitUI(self):
 
-        txt1 = '''I'm giving up the ghost of love
-in the shadows cast on devotion
-She is the one that I adore
-creed of my silent suffocation
-Break this bittersweet spell on me
-lost in the arms of destiny'''
-
-        txt2 = '''There is something in the way
-You're always somewhere else
-Feelings have deserted me
-To a point of no return
-I don't believe in God
-But I pray for you'''
-
         pnl = wx.Panel(self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
 
-        font = wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.DEFAULT)
+        font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD)
+        heading = wx.StaticText(self, label='The Central Europe',
+                                pos=(25, 15), size=(200, -1))
+        heading.SetFont(font)
 
-        st1 = wx.StaticText(pnl, label=txt1, style=wx.ALIGN_LEFT)
-        st2 = wx.StaticText(pnl, label=txt2, style=wx.ALIGN_CENTER)
+        wx.StaticLine(self, pos=(25, 50), size=(300,1))
 
-        st1.SetFont(font)
-        st2.SetFont(font)
+        wx.StaticText(self, label='Slovakia', pos=(25, 80))
+        wx.StaticText(self, label='Hungary', pos=(25, 100))
+        wx.StaticText(self, label='Poland', pos=(25, 120))
+        wx.StaticText(self, label='Czech Republic', pos=(25, 140))
+        wx.StaticText(self, label='Germany', pos=(25, 160))
+        wx.StaticText(self, label='Slovenia', pos=(25, 180))
+        wx.StaticText(self, label='Austria', pos=(25, 200))
+        wx.StaticText(self, label='Switzerland', pos=(25, 220))
 
-        vbox.Add(st1, flag=wx.ALL, border=15)
-        vbox.Add(st2, flag=wx.ALL, border=15)
-        
-        pnl.SetSizer(vbox)
+        wx.StaticText(self, label='5 445 000', pos=(250, 80))
+        wx.StaticText(self, label='10 014 000', pos=(250, 100))
+        wx.StaticText(self, label='38 186 000', pos=(250, 120))
+        wx.StaticText(self, label='10 562 000', pos=(250, 140))
+        wx.StaticText(self, label='81 799 000', pos=(250, 160))
+        wx.StaticText(self, label='2 050 000', pos=(250, 180))
+        wx.StaticText(self, label='8 414 000', pos=(250, 200))
+        wx.StaticText(self, label='7 866 000', pos=(250, 220))
 
-        self.SetTitle('Bittersweet')
+        wx.StaticLine(self, pos=(25, 260), size=(300,1))
+
+        tsum = wx.StaticText(self, label='164 336 000', pos=(240, 280))
+        sum_font = tsum.GetFont()
+        sum_font.SetWeight(wx.BOLD)
+        tsum.SetFont(sum_font)
+
+        btn = wx.Button(self, label='Close', pos=(140, 310))
+
+        btn.Bind(wx.EVT_BUTTON, self.OnClose)
+
+        self.SetSize((360, 380))
+        self.SetTitle('wx.StaticLine')
         self.Centre()
+
+    def OnClose(self, e):
+
+        self.Close(True)
 
 
 def main():
