@@ -3,8 +3,8 @@
 """
 ZetCode wxPython tutorial
 
-In this code example, we create a
-button widget.
+In this code example, we create three
+toggle button widgets.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -24,17 +24,71 @@ class Example(wx.Frame):
     def InitUI(self):
 
         pnl = wx.Panel(self)
-        closeButton = wx.Button(pnl, label='Close', pos=(20, 20))
 
-        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.col = wx.Colour(0, 0, 0)
+
+        rtb = wx.ToggleButton(pnl, label='red', pos=(20, 25))
+        gtb = wx.ToggleButton(pnl, label='green', pos=(20, 60))
+        btb = wx.ToggleButton(pnl, label='blue', pos=(20, 100))
+
+        self.cpnl  = wx.Panel(pnl, pos=(150, 20), size=(110, 110))
+        self.cpnl.SetBackgroundColour(self.col)
+
+        rtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleRed)
+        gtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleGreen)
+        btb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleBlue)
 
         self.SetSize((350, 250))
-        self.SetTitle('wx.Button')
+        self.SetTitle('Toggle buttons')
         self.Centre()
 
-    def OnClose(self, e):
+    def ToggleRed(self, e):
 
-        self.Close(True)
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+
+        green = self.col.Green()
+        blue = self.col.Blue()
+
+        if isPressed:
+            self.col.Set(255, green, blue)
+        else:
+            self.col.Set(0, green, blue)
+
+        self.cpnl.SetBackgroundColour(self.col)
+        self.cpnl.Refresh()
+
+    def ToggleGreen(self, e):
+
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+
+        red = self.col.Red()
+        blue = self.col.Blue()
+
+        if isPressed:
+            self.col.Set(red, 255, blue)
+        else:
+            self.col.Set(red, 0, blue)
+
+        self.cpnl.SetBackgroundColour(self.col)
+        self.cpnl.Refresh()
+
+    def ToggleBlue(self, e):
+
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+
+        red = self.col.Red()
+        green = self.col.Green()
+
+        if isPressed:
+            self.col.Set(red, green, 255)
+        else:
+            self.col.Set(red, green, 0)
+
+        self.cpnl.SetBackgroundColour(self.col)
+        self.cpnl.Refresh()
 
 
 def main():
@@ -46,4 +100,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()  
+    main()
