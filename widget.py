@@ -3,7 +3,7 @@
 """
 ZetCode wxPython tutorial
 
-In this example we create gauge widget.
+In this example we create slider control.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -12,7 +12,6 @@ last modified: July 2020
 
 import wx
 
-TASK_RANGE = 50
 
 class Example(wx.Frame):
 
@@ -23,69 +22,31 @@ class Example(wx.Frame):
 
     def InitUI(self):
 
-        self.timer = wx.Timer(self, 1)
-        self.count = 0
-
-        self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
-
         pnl = wx.Panel(self)
-        vbox = wx.BoxSizer(wx.VERTICAL)
-        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gauge = wx.Gauge(pnl, range=TASK_RANGE, size=(250, -1))
-        self.btn1 = wx.Button(pnl, wx.ID_OK)
-        self.btn2 = wx.Button(pnl, wx.ID_STOP)
-        self.text = wx.StaticText(pnl, label='Task to be done')
+        sizer = wx.GridBagSizer(5, 5)
 
-        self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
-        self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
+        sld = wx.Slider(pnl, value=200, minValue=150, maxValue=500,
+                        style=wx.SL_HORIZONTAL)
 
-        hbox1.Add(self.gauge, proportion=1, flag=wx.ALIGN_CENTRE)
-        hbox2.Add(self.btn1, proportion=1, flag=wx.RIGHT, border=10)
-        hbox2.Add(self.btn2, proportion=1)
-        hbox3.Add(self.text, proportion=1)
+        sld.Bind(wx.EVT_SCROLL, self.OnSliderScroll)
+        sizer.Add(sld, pos=(0, 0), flag=wx.ALL|wx.EXPAND, border=25)
 
-        vbox.Add((0, 30))
+        self.txt = wx.StaticText(pnl, label='200')
+        sizer.Add(self.txt, pos=(0, 1), flag=wx.TOP|wx.RIGHT, border=25)
 
-        vbox.Add(hbox1, flag=wx.ALIGN_CENTRE)
+        sizer.AddGrowableCol(0)
+        pnl.SetSizer(sizer)
 
-        vbox.Add((0, 20))
-
-        vbox.Add(hbox2, proportion=1, flag=wx.ALIGN_CENTRE)
-        vbox.Add(hbox3, proportion=1, flag=wx.ALIGN_CENTRE)
-
-        pnl.SetSizer(vbox)
-
-        self.SetTitle('wx.Gauge')
+        self.SetTitle('wx.Slider')
         self.Centre()
 
-    def OnOk(self, e):
+    def OnSliderScroll(self, e):
 
-        if self.count >= TASK_RANGE:
-            return
+        obj = e.GetEventObject()
+        val = obj.GetValue()
 
-        self.timer.Start(100)
-        self.text.SetLabel('Task in Progress')
-
-    def OnStop(self, e):
-
-        if self.count == 0 or self.count >= TASK_RANGE or not self.timer.IsRunning():
-            return
-
-        self.timer.Stop()
-        self.text.SetLabel('Task Interrupted')
-
-    def OnTimer(self, e):
-
-        self.count = self.count + 1
-        self.gauge.SetValue(self.count)
-
-        if self.count == TASK_RANGE:
-
-            self.timer.Stop()
-            self.text.SetLabel('Task Completed')
+        self.txt.SetLabel(str(val))
 
 
 def main():
@@ -97,4 +58,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()                
+    main()  
