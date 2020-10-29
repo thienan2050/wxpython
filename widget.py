@@ -1,78 +1,40 @@
 #!/usr/bin/env python
 
-'''
+"""
 ZetCode wxPython tutorial
 
-In this example, we create an
-about dialog box.
+In this code example, we create a
+button widget.
 
 author: Jan Bodnar
 website: www.zetcode.com
 last modified: July 2020
-'''
+"""
 
 import wx
-import wx.adv
 
 
 class Example(wx.Frame):
 
-    def __init__(self, *args, **kwargs):
-        super(Example, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw)
 
         self.InitUI()
 
     def InitUI(self):
 
-        menubar = wx.MenuBar()
-        help = wx.Menu()
-        help.Append(wx.ID_ANY, '&About')
-        help.Bind(wx.EVT_MENU, self.OnAboutBox)
+        pnl = wx.Panel(self)
+        closeButton = wx.Button(pnl, label='Close', pos=(20, 20))
 
-        menubar.Append(help, '&Help')
-        self.SetMenuBar(menubar)
+        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
 
         self.SetSize((350, 250))
-        self.SetTitle('About dialog box')
+        self.SetTitle('wx.Button')
         self.Centre()
 
-    def OnAboutBox(self, e):
+    def OnClose(self, e):
 
-        description = """File Hunter is an advanced file manager for
-the Unix operating system. Features include powerful built-in editor,
-advanced search capabilities, powerful batch renaming, file comparison,
-extensive archive handling and more.
-"""
-
-        licence = """\nFile Hunter is free software; you can redistribute
-it and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-File Hunter is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have
-received a copy of the GNU General Public License along with File Hunter;
-if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-Suite 330, Boston, MA  02111-1307  USA"""
-
-
-        info = wx.adv.AboutDialogInfo()
-
-        info.SetIcon(wx.Icon('Trump.jpg', wx.BITMAP_TYPE_PNG))
-        info.SetName('File Hunter')
-        info.SetVersion('1.0')
-        info.SetDescription(description)
-        info.SetCopyright('(C) 2007 - 2020 Jan Bodnar')
-        info.SetWebSite('http://www.zetcode.com')
-        info.SetLicence(licence)
-        info.AddDeveloper('Jan Bodnar')
-        info.AddDocWriter('Jan Bodnar')
-        info.AddArtist('The Tango crew')
-        info.AddTranslator('Jan Bodnar')
-
-        wx.adv.AboutBox(info)
+        self.Close(True)
 
 
 def main():
@@ -84,4 +46,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main()  
