@@ -3,7 +3,7 @@
 """
 ZetCode wxPython tutorial
 
-In this example we create slider control.
+In this example we create spin control.
 
 author: Jan Bodnar
 website: www.zetcode.com
@@ -26,27 +26,47 @@ class Example(wx.Frame):
 
         sizer = wx.GridBagSizer(5, 5)
 
-        sld = wx.Slider(pnl, value=200, minValue=150, maxValue=500,
-                        style=wx.SL_HORIZONTAL)
+        st1 = wx.StaticText(pnl, label='Convert Fahrenheit temperature to Celsius')
+        sizer.Add(st1, pos=(0, 0), span=(1, 2), flag=wx.ALL, border=15)
 
-        sld.Bind(wx.EVT_SCROLL, self.OnSliderScroll)
-        sizer.Add(sld, pos=(0, 0), flag=wx.ALL|wx.EXPAND, border=25)
+        st2 = wx.StaticText(pnl, label='Fahrenheit:')
+        sizer.Add(st2, pos=(1, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        
+        self.sc = wx.SpinCtrl(pnl, value='0')
+        self.sc.SetRange(-459, 1000)
 
-        self.txt = wx.StaticText(pnl, label='200')
-        sizer.Add(self.txt, pos=(0, 1), flag=wx.TOP|wx.RIGHT, border=25)
+        sizer.Add(self.sc, pos=(1, 1), flag=wx.ALIGN_CENTER)
 
-        sizer.AddGrowableCol(0)
+        st3 = wx.StaticText(pnl, label='Celsius:')
+        sizer.Add(st3, pos=(2, 0), flag=wx.ALL|wx.ALIGN_RIGHT, border=15)
+
+        self.celsius = wx.StaticText(pnl, label='')
+        sizer.Add(self.celsius, pos=(2, 1), flag=wx.ALL, border=15)
+
+        computeButton = wx.Button(pnl, label='Compute')
+        computeButton.SetFocus()
+        sizer.Add(computeButton, pos=(3, 0), flag=wx.ALIGN_RIGHT|wx.TOP, border=30)
+
+        closeButton = wx.Button(pnl, label='Close')
+        sizer.Add(closeButton, pos=(3, 1), flag=wx.ALIGN_LEFT|wx.TOP, border=30)
+
+        computeButton.Bind(wx.EVT_BUTTON, self.OnCompute)
+        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
+
         pnl.SetSizer(sizer)
 
-        self.SetTitle('wx.Slider')
+        self.SetTitle('wx.SpinCtrl')
         self.Centre()
 
-    def OnSliderScroll(self, e):
+    def OnClose(self, e):
 
-        obj = e.GetEventObject()
-        val = obj.GetValue()
+        self.Close(True)
 
-        self.txt.SetLabel(str(val))
+    def OnCompute(self, e):
+
+        fahr = self.sc.GetValue()
+        cels = round((fahr - 32) * 5 / 9.0, 2)
+        self.celsius.SetLabel(str(cels))
 
 
 def main():
@@ -58,4 +78,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()  
+    main()       
