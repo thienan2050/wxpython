@@ -1,41 +1,60 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+"""
+ZetCode wxPython tutorial
+
+In this example we create a checkbox widget.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: July 2020
+"""
 
 import wx
 
 
 class Example(wx.Frame):
-           
+
     def __init__(self, *args, **kw):
-        super(Example, self).__init__(*args, **kw) 
-        
+        super(Example, self).__init__(*args, **kw)
+
         self.InitUI()
-        
-    def InitUI(self):   
+
+    def InitUI(self):
 
         pnl = wx.Panel(self)
-        
-        distros = ['Ubuntu', 'Arch', 'Fedora', 'Debian', 'Mint']
-        cb = wx.ComboBox(pnl, pos=(50, 30), choices=distros, 
-            style=wx.CB_READONLY)
 
-        self.st = wx.StaticText(pnl, label='', pos=(50, 140))
-        cb.Bind(wx.EVT_COMBOBOX, self.OnSelect)
-        
-        self.SetSize((250, 230))
-        self.SetTitle('wx.ComboBox')
+        vbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        cb = wx.CheckBox(pnl, label='Show title')
+        cb.SetValue(True)
+        cb.Bind(wx.EVT_CHECKBOX, self.ShowOrHideTitle)
+
+        vbox.Add(cb, flag=wx.TOP|wx.LEFT, border=30)
+
+        pnl.SetSizer(vbox)
+
+        self.SetTitle('wx.CheckBox')
         self.Centre()
-        self.Show(True)          
-        
-    def OnSelect(self, e):
-        
-        i = e.GetString()
-        self.st.SetLabel(i)
-        
+
+    def ShowOrHideTitle(self, e):
+
+        sender = e.GetEventObject()
+        isChecked = sender.GetValue()
+
+        if isChecked:
+            self.SetTitle('wx.CheckBox')
+        else:
+            self.SetTitle('')
+
+
 def main():
-    
-    ex = wx.App()
-    Example(None)
-    ex.MainLoop()    
+
+    app = wx.App()
+    ex = Example(None)
+    ex.Show()
+    app.MainLoop()
+
 
 if __name__ == '__main__':
-    main()   
+    main()
