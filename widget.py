@@ -14,32 +14,28 @@ class Example(wx.Frame):
 
         pnl = wx.Panel(self)
         
-        wx.StaticBox(pnl, label='Personal Info', pos=(5, 5), size=(240, 170))
-        wx.CheckBox(pnl, label='Male', pos=(15, 30))
-        wx.CheckBox(pnl, label='Married', pos=(15, 55))
-        wx.StaticText(pnl, label='Age', pos=(15, 95))
-        wx.SpinCtrl(pnl, value='1', pos=(55, 90), size=(60, -1), min=1, max=120)
+        distros = ['Ubuntu', 'Arch', 'Fedora', 'Debian', 'Mint']
+        cb = wx.ComboBox(pnl, pos=(50, 30), choices=distros, 
+            style=wx.CB_READONLY)
+
+        self.st = wx.StaticText(pnl, label='', pos=(50, 140))
+        cb.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         
-        btn = wx.Button(pnl, label='Ok', pos=(90, 185), size=(60, -1))
-
-        btn.Bind(wx.EVT_BUTTON, self.OnClose)
-
-        self.SetSize((270, 250))
-        self.SetTitle('Static box')
+        self.SetSize((250, 230))
+        self.SetTitle('wx.ComboBox')
         self.Centre()
         self.Show(True)          
         
-    def OnClose(self, e):
+    def OnSelect(self, e):
         
-        self.Close(True)    
-               
+        i = e.GetString()
+        self.st.SetLabel(i)
         
 def main():
     
     ex = wx.App()
     Example(None)
     ex.MainLoop()    
-
 
 if __name__ == '__main__':
     main()   
